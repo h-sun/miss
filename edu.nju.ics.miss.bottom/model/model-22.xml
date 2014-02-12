@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+	<SensorDistances>
+		<max value="2000" />
+		<min value="310" />
+	</SensorDistances>
+	<SensorsID>
+		<front address="1" lnum="2" rnum="4" />
+		<right address="2" lnum="2" rnum="4" />
+		<back address="1" lnum="3" rnum="1" />
+		<left address="2" lnum="3" rnum="1" />
+	</SensorsID>
+	<Servos>
+        <middleAngle id="1" value="815" />
+    </Servos>
+	<Angles>
+		<angle name="turnRight" value="90" />
+		<angle name="turnLeft" value="90" />
+	</Angles>
+</model>

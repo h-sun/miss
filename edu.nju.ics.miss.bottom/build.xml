@@ -1,0 +1,119 @@
+<project name="edu.nju.ics.miss.bottom" default="cp">
+    <description>
+        Test1 build file
+    </description>
+
+    <!-- set properties for this build -->
+    <property environment="env" />
+    <property file="build.properties" />
+
+    <!-- check whether nxj.home is correct -->
+    <available file="${nxj.home}/lib/pc" property="lejos.pc.exists" />
+    <available file="${nxj.home}/lib/nxt" property="lejos.nxt.exists" />
+    <fail unless="lejos.pc.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/pc does not exist" />
+    <fail unless="lejos.nxt.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/nxt does not exist" />
+
+    <!-- define the search paths -->
+    <path id="lejos.pc">
+        <fileset dir="${nxj.home}/lib/pc">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    <path id="lejos.nxt">
+        <fileset dir="${nxj.home}/lib/nxt">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <condition property="d32Flag" value="-d32" else="-Dblank.dummy.arg=">
+        <and>
+            <os family="mac" />
+        </and>
+    </condition>
+
+    <!-- deletes generated files -->
+    <target name="clean" description="clean up all generated files">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile" depends="clean" description="compile the source ">
+        <!-- Compile the java code from ${source.dir} to ${classes.dir}  -->
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${source.dir}" includes="${source.include}" excludes="${source.exclude}" encoding="${source.encoding}" source="${source.version}" target="${target.version}" destdir="${classes.dir}" debug="true" includeAntRuntime="false" includeJavaRuntime="false" verbose="false">
+
+            <bootclasspath refid="lejos.nxt" />
+            <!-- enable warnings -->
+            <compilerarg value="-Xlint:${source.warn}" />
+            <!--
+                Without this, there are some JDK jars in the classpath.
+                Set verbose=true to check that the classpath is really clean.
+            -->
+            <compilerarg value="-extdirs" />
+            <compilerarg value="." />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="generate jar of edu.nju.ics.miss.bottom">
+        <jar destfile="${classes.jar}">
+            <fileset dir="${classes.dir}" />
+            <fileset dir="${resource.dir}" includes="${resource.include}" excludes="${resource.exclude}" />
+        </jar>
+    </target>
+
+    <target name="cp" depends="jar">
+        <copy todir="${nxj.home}/lib/nxt" file="${classes.jar}" />
+    </target>
+
+    <target name="test" depends="compile" description="link the binary ">
+        <!-- Link the binary and create a signature file -->
+        <java classname="lejos.pc.tools.NXJLink" failonerror="true">
+            <classpath refid="lejos.pc" />
+            <arg value="--bootclasspath" />
+            <arg pathref="lejos.nxt" />
+            <arg value="--classpath" />
+            <arg path="${classes.dir}" />
+            <arg value="--writeorder" />
+            <arg value="LE" />
+            <arg value="-o" />
+            <arg file="${test.output.nxj}" />
+            <arg value="-od" />
+            <arg file="${test.output.nxd}" />
+            <arg value="${test.main.class}" />
+        </java>
+        <!-- <copy todir="." file="${output.nxj}" /> -->
+        <scp file="${test.output.nxj}" todir="${test.remote.address}" trust="true" />
+    </target>
+
+    <target name="link" depends="compile" description="link the binary ">
+        <!-- Link the binary and create a signature file -->
+        <java classname="lejos.pc.tools.NXJLink" failonerror="true">
+            <classpath refid="lejos.pc" />
+            <arg value="--bootclasspath" />
+            <arg pathref="lejos.nxt" />
+            <arg value="--classpath" />
+            <arg path="${classes.dir}" />
+            <arg value="--writeorder" />
+            <arg value="LE" />
+            <arg value="-o" />
+            <arg file="${test.output.nxj}" />
+            <arg value="-od" />
+            <arg file="${test.output.nxd}" />
+            <arg value="${test.main.class}" />
+        </java>
+        <!-- <copy todir="." file="${output.nxj}" /> -->
+    </target>
+
+    <target name="scp" depends="link" description="copy to car">
+        <scp file="${test.output.nxj}" todir="${test.remote.address}" trust="true" />
+    </target>
+
+    <target name="upload" depends="link" description="upload the binary">
+        <java classname="lejos.pc.tools.NXJUpload" fork="true" failonerror="true">
+            <sysproperty key="nxj.home" file="${nxj.home}" />
+            <jvmarg value="${d32Flag}" />
+            <classpath refid="lejos.pc" />
+            <arg value="${test.output.nxj}" />
+        </java>
+    </target>
+    
+</project>
