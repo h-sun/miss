@@ -1,0 +1,82 @@
+<project name="org.lejos.example">
+    <description>
+    	edu.nju.ics.miss.framework build file
+    </description>
+
+    <!-- set properties for this build -->
+    <property environment="env" />
+    <property file="build.properties" />
+
+    <!-- check whether nxj.home is correct -->
+    <available file="${nxj.home}/lib/pc" property="lejos.pc.exists" />
+    <available file="${nxj.home}/lib/nxt" property="lejos.nxt.exists" />
+    <fail unless="lejos.pc.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/pc does not exist" />
+    <fail unless="lejos.nxt.exists" message="nxj.home variable incorrect, ${nxj.home}/lib/nxt does not exist" />
+
+    <!-- define the search paths -->
+    <path id="lejos.pc">
+        <fileset dir="${nxj.home}/lib/pc">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+    <path id="lejos.nxt">
+        <fileset dir="${nxj.home}/lib/nxt">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <path id="classpath">
+        <fileset dir="lib/">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <!-- deletes generated files -->
+    <target name="clean" description="clean up all generated files">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <target name="compile4NXT" depends="clean" description="compile the source ">
+        <!-- Compile the java code from ${source.dir} to ${classes.dir}  -->
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${source.dir}" includes="${source.include}" excludes="${source.exclude}" encoding="${source.encoding}" source="${source.version}" target="${target.version}" destdir="${classes.dir}" debug="true" includeAntRuntime="false" includeJavaRuntime="false" verbose="false">
+            <bootclasspath refid="lejos.nxt" />
+            <!-- enable warnings -->
+            <compilerarg value="-Xlint:${source.warn}" />
+            <!--
+				Without this, there are some JDK jars in the classpath.
+				Set verbose=true to check that the classpath is really clean.
+			-->
+            <compilerarg value="-extdirs" />
+            <compilerarg value="." />
+        </javac>
+    </target>
+
+    <target name="jar4NXT" depends="compile4NXT" description="generate jar of edu.nju.ics.miss.framework">
+        <jar destfile="${classes.jar}">
+            <fileset dir="${classes.dir}" />
+            <fileset dir="${resource.dir}" includes="${resource.include}" excludes="${resource.exclude}" />
+        </jar>
+    </target>
+
+    <target name="cp2NXTDir" depends="jar4NXT">
+        <copy todir="${nxj.home}/lib/nxt" file="${classes.jar}" />
+    </target>
+
+    <target name="compile4Emulator" depends="clean" description="compile the source ">
+        <mkdir dir="${classes.dir}" />
+        <javac srcdir="${source.dir}" destdir="${classes.dir}" includeAntRuntime="false" source="1.6" target="1.6" debug="true" >
+            <classpath refid="classpath">
+            </classpath>
+            <compilerarg line="-encoding utf8" />
+        </javac>
+    </target>
+
+    <target name="jar4Emulator" depends="compile4Emulator" description="generate jar of edu.nju.ics.miss.framework">
+        <jar destfile="${classes.jar}">
+            <fileset dir="${classes.dir}" />
+            <fileset dir="${resource.dir}" includes="${resource.include}" excludes="${resource.exclude}" />
+        </jar>
+    </target>
+
+</project>

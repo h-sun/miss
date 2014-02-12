@@ -1,0 +1,18 @@
+<project name="org.lejos.example">
+    <description>
+        edu.nju.ics.miss.emulator.plug build file
+    </description>
+
+    <target name="jar" description="compile the source ">
+        <delete dir="build/" />
+        <mkdir dir="build/classes" />
+        <javac srcdir="src" destdir="build/classes" includeAntRuntime="false" source="1.6"  target="1.6" debug="true" >
+            <compilerarg line="-encoding utf8" />
+        </javac>
+        <jar destfile="edu.nju.ics.miss.emulator.plug.jar">
+            <fileset dir="build/classes/" />
+        </jar>
+        
+    </target>
+
+</project>

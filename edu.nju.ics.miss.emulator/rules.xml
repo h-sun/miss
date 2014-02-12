@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+	<states>
+	    <state name="s0" />
+		<state name="s1" initial="true" />
+		<state name="s2" />
+		<state name="s3" />
+		<state name="s4" />
+	</states>
+	<conditions>
+	   <condition name="TaskFinished" />
+	   <condition name="InStartLocation" />
+	   <condition name="InEndLocation" />
+	   <condition name="CooperatorFinished" />
+	   <condition name="CooperatorFail" />
+	</conditions>
+	<actions>
+		<action name="GotoStart" type="forward" />
+		<action name="GotoEnd" type="forward" />
+		<action name="DoStart" type="custom" />
+		<action name="DoEnd" type="custom" />
+		<action name="DoFail" type="custom" />
+		<action name="Stop" type="stop" />
+		<action name="Exit" type="exit" />
+	</actions>
+	<rules>
+		<rule name="r1">
+			<currstate value="s1" />
+			<nextstate value="s0" />
+			<condition value="TaskFinished" />
+			<action value="Exit" />
+		</rule>
+		<rule name="r2">
+			<currstate value="s1" />
+			<nextstate value="s2" />
+			<condition value="!TaskFinished" />
+			<action value="DoStart&GotoEnd" />
+		</rule>
+		<rule name="r3">
+			<currstate value="s2" />
+			<nextstate value="s2" />
+			<condition value="!IsInEnd" />
+			<action value="GotoEnd" />
+		</rule>
+		<rule name="r4">
+			<currstate value="s2" />
+			<nextstate value="s3" />
+			<condition value="IsInEnd" />
+			<action value="DoEnd" />
+		</rule>
+		<rule name="r5">
+			<currstate value="s3" />
+			<nextstate value="s4" />
+			<condition value="!IsFail" />
+			<action value="GotoStart" />
+		</rule>
+		<rule name="r6">
+			<currstate value="s4" />
+			<nextstate value="s4" />
+			<condition value="!IsInStart" />
+			<action value="GotoStart" />
+		</rule>
+		<rule name="r7">
+			<currstate value="s4" />
+			<nextstate value="s1" />
+			<condition value="IsInStart" />
+			<action value="Stop" />
+		</rule>
+		<rule name="r8">
+			<currstate value="s3" />
+			<nextstate value="s4" />
+			<condition value="IsFail" />
+			<action value="DoFail&GotoStart" />
+		</rule>
+	</rules>
+</xml>
