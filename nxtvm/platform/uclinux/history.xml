@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="gcc noversion nomachine -ggdb3 -c -O1 -I. -I../../javavm">
+      <target file="threads.o" lastModified="136ef00c9a0">
+         <source file="../../javavm/threads.c" lastModified="13553700240"/>
+      </target>
+      <target file="language.o" lastModified="136ef00c9a0">
+         <source file="../../javavm/language.c" lastModified="13553700240"/>
+      </target>
+      <target file="load.o" lastModified="136ef00c5b8">
+         <source file="load.c" lastModified="13553700a10"/>
+      </target>
+      <target file="traceemul.o" lastModified="136ef00c9a0">
+         <source file="traceemul.c" lastModified="13553700a10"/>
+      </target>
+      <target file="exceptions.o" lastModified="136ef00c5b8">
+         <source file="../../javavm/exceptions.c" lastModified="135c42e40a0"/>
+      </target>
+      <target file="poll.o" lastModified="136ef00c5b8">
+         <source file="../../javavm/poll.c" lastModified="136ee80b878"/>
+      </target>
+      <target file="nativeemul.o" lastModified="136ef00c1d0">
+         <source file="nativeemul.c" lastModified="136eed37040"/>
+      </target>
+      <target file="verbose.o" lastModified="136ef00c1d0">
+         <source file="verbose.c" lastModified="13553700a10"/>
+      </target>
+      <target file="sensors.o" lastModified="136ef00c9a0">
+         <source file="sensors.c" lastModified="13553700a10"/>
+      </target>
+      <target file="interpreter.o" lastModified="136ef00c5b8">
+         <source file="../../javavm/interpreter.c" lastModified="13553700240"/>
+      </target>
+      <target file="debug.o" lastModified="136ef00c9a0">
+         <source file="../../javavm/debug.c" lastModified="13553700240"/>
+      </target>
+      <target file="memory.o" lastModified="136ef00c9a0">
+         <source file="../../javavm/memory.c" lastModified="136ee858ec0"/>
+      </target>
+      <target file="opcodeinfo.o" lastModified="136ef00c9a0">
+         <source file="opcodeinfo.c" lastModified="13553700a10"/>
+      </target>
+      <target file="tvmemul.o" lastModified="136ef00c9a0">
+         <source file="tvmemul.c" lastModified="136ef00ae48"/>
+      </target>
+      <target file="platform_hooks.o" lastModified="136ef00c9a0">
+         <source file="platform_hooks.c" lastModified="130bd95b110"/>
+      </target>
+   </processor>
+   <processor signature="gcc">
+      <target file="dump_config" lastModified="136ed6866c0">
+         <source file="dump_config.o" lastModified="136ed6862d8"/>
+      </target>
+   </processor>
+   <processor signature="gcc -lm">
+      <target file="emu-lejosrun" lastModified="136ef00cd88">
+         <source file="nativeemul.o" lastModified="136ef00c1d0"/>
+         <source file="verbose.o" lastModified="136ef00c1d0"/>
+         <source file="load.o" lastModified="136ef00c5b8"/>
+         <source file="poll.o" lastModified="136ef00c5b8"/>
+         <source file="exceptions.o" lastModified="136ef00c5b8"/>
+         <source file="interpreter.o" lastModified="136ef00c5b8"/>
+         <source file="memory.o" lastModified="136ef00c9a0"/>
+         <source file="traceemul.o" lastModified="136ef00c9a0"/>
+         <source file="tvmemul.o" lastModified="136ef00c9a0"/>
+         <source file="platform_hooks.o" lastModified="136ef00c9a0"/>
+         <source file="opcodeinfo.o" lastModified="136ef00c9a0"/>
+         <source file="debug.o" lastModified="136ef00c9a0"/>
+         <source file="language.o" lastModified="136ef00c9a0"/>
+         <source file="sensors.o" lastModified="136ef00c9a0"/>
+         <source file="threads.o" lastModified="136ef00c9a0"/>
+      </target>
+   </processor>
+</history>
